@@ -149,7 +149,19 @@ module Viewpoint
             raise EwsError, "#{@response_message.code}: #{@response_message.message}"
           end
         end
+        def get_attachment_response(opts)
+          if(@response_message.status == 'Success')
+            items = {}
+            (@response/"//#{NS_EWS_TYPES}:FileAttachment/*").each do |i|
 
+               items[i.node_name] = i.children[0]
+
+            end
+            @response_message.items = items
+          else
+            raise EwsError, "#{@response_message.code}: #{@response_message.message}"
+          end
+        end
         def sync_folder_items_response(opts)
           if(@response_message.status == 'Success')
             sync = []

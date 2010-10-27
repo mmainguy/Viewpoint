@@ -602,12 +602,17 @@ module Viewpoint
           parse_delete_attachment(resp)
         end
 
-        def get_attachment
+        def get_attachment(attachment_id)
           action = "#{SOAP_ACTION_PREFIX}/GetAttachment"
           resp = invoke("#{NS_EWS_MESSAGES}:GetAttachment", :soap_action => action) do |get_attachment|
-            build_get_attachment!(get_attachment)
+
+            build!(get_attachment) do
+              attachment_shape!(get_attachment, {:attachement_shape => :include_mime_content})
+              attachment_ids!(get_attachment, [attachment_id])
+            end
+            #build_get_attachment!(get_attachment)
           end
-          parse_get_attachment(resp)
+          parse!(resp)
         end
 
         def create_managed_folder

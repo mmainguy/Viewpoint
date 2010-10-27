@@ -80,6 +80,16 @@ module Viewpoint
         end
         @headers
       end
+      def attachments
+        conn = Viewpoint::EWS::EWS.instance
+        atts = []
+
+        @ews_item[:attachments].each do |att|
+          resp = conn.ews.get_attachment att[1][:attachment_id]
+          atts << {:attachment_id => att[1][:attachment_id]}.merge(resp.items)
+        end
+        return atts
+      end
 
       private
 

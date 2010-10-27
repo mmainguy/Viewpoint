@@ -75,6 +75,13 @@ module Viewpoint
           end
         end
 
+        def attachment_ids!(node, attachment_ids)
+          node.add("#{NS_EWS_MESSAGES}:AttachmentIds") do |ids|
+            attachment_ids.each do |id|
+              attachment_id!(ids,id)
+            end
+          end
+        end
         # Builds an ItemId element out of a String or Hash object
         # @param [Element] node The node we are adding Mailbox elements to.
         # @param [String,Hash] item_id The id of the Item.  If this is a Hash
@@ -88,6 +95,17 @@ module Viewpoint
             else
               iid.set_attr('Id',item_id[:id])
               iid.set_attr('ChangeKey',item_id[:change_key])
+            end
+          end
+        end
+
+        def attachment_id!(node, attachment_id, element_name="#{NS_EWS_TYPES}:AttachmentId")
+          node.add(element_name) do |iid|
+            if(attachment_id.is_a?(String))
+              iid.set_attr('Id',attachment_id)
+            else
+              iid.set_attr('Id',attachment_id[:id])
+              #iid.set_attr('ChangeKey',attachment_id[:change_key])
             end
           end
         end
@@ -135,6 +153,13 @@ module Viewpoint
                 end
               end
             end
+          end
+        end
+
+        def attachment_shape!(node, attachment_shape)
+          node.add("#{NS_EWS_MESSAGES}:AttachmentShape") do |ashape|
+       #     ashape.add("#{NS_EWS_TYPES}:IncludeMimeContent")
+       #     ashape.add("#{NS_EWS_TYPES}:BodyType")
           end
         end
 

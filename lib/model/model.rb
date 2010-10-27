@@ -58,6 +58,21 @@ module Viewpoint
           end
         end
       end
+      def define_hash_vars(*vars)
+        vars.each do |var|
+          if (@ews_item[var])
+            @ews_methods<<var
+            self.instance_eval <<-EOF
+              def #{var.to_s}
+                @ews_item[:#{var}].collect do |item|
+                    conn = Viewpoint::EWS::EWS.instance
+                    conn.getAttachment item[:id]
+                end
+              end
+            EOF
+          end
+        end
+      end
       
       def define_int_var(*vars)
         vars.each do |var|
