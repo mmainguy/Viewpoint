@@ -5,15 +5,12 @@ require 'date'
 CLEAN.include("pkg")
 CLEAN.include("doc")
 
-Rake::GemPackageTask.new(GEMSPEC) do |pkg|
-  pkg.need_tar = true
-end
 
 task :default => [:buildgem]
 
 desc "Build the gem without a version change"
 task :buildgem => :clean do
-  system "gem build bundler.gemspec"
+  system "gem build viewpoint.gemspec"
 end
 
 task :release => :build do
